@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.glaway</groupId>
-    <artifactId>myspringboot</artifactId>
+    <artifactId>mimu</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>myspringboot</name>
+    <name>mimu</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
