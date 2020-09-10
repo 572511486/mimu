@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @description:
  *        Redis测试类
  */
-@RestController("/redis")
+@RestController
+@RequestMapping("/redis")
 public class MyRedisController {
 
 	@Autowired
