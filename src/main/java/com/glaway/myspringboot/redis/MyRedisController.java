@@ -3,6 +3,7 @@ package com.glaway.myspringboot.redis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,12 @@ public class MyRedisController {
 	}
 
 	@GetMapping("/hello")
-	public String helloRedis() {
+	public String helloRedis(String key) {
 		stringRedisTemplate.opsForValue().set("hello","word");
-		return stringRedisTemplate.opsForValue().get("hello");
+		// stringRedisTemplate.opsForValue().get("hello")
+		BoundValueOperations<String, String> boundValueOps = stringRedisTemplate.boundValueOps("name");
+		boundValueOps.set("张三");
+		return boundValueOps.get() + stringRedisTemplate.opsForValue().get("hello");
 	}
 
 }
