@@ -1,10 +1,11 @@
 package com.glaway.myspringboot.aop;
 
+import com.glaway.myspringboot.utils.ResultVoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -23,7 +24,7 @@ import java.util.Map;
  */
 @Aspect
 @Slf4j
-@Component
+// @Component
 public class WebAspect {
 	/**
 	 * @author 		   FZH   
@@ -77,5 +78,24 @@ public class WebAspect {
 	@AfterThrowing(value = "pointCut()",throwing = "e")
 	public void afterThrowing(JoinPoint joinPoint, Exception e) {
 		log.info("afterThrowing methodName : {} , throw message : {}",joinPoint.getSignature().getName(),e.getLocalizedMessage());
+	}
+
+	@Around("pointCut()")
+	public Object around(ProceedingJoinPoint joinPoint) {
+		long begin = System.currentTimeMillis();
+		log.info("around : begin");
+		Object proceed = null;
+		try {
+			 // 调用目标方法
+			 proceed = joinPoint.proceed();
+		} catch (Throwable throwable) {
+			log.info("around error:{}",throwable.getMessage());
+			return ResultVoUtil.error(throwable.getMessage());
+		}
+		long end = System.currentTimeMillis();
+		log.info("around : execute time = {}", end - begin);
+		log.info("around : return value = {}",proceed);
+		log.info("around end");
+		return proceed;
 	}
 }

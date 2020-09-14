@@ -4,6 +4,7 @@ import com.glaway.myspringboot.utils.ResultVoUtil;
 import com.glaway.myspringboot.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,16 +28,15 @@ public class MyAspectController {
 	 * @parameter 	   [message]
 	 * @return 		   com.glaway.myspringboot.vo.ResultVo<java.lang.String> 
 	 * @description		
-	 *       测试aspect
+	 *       测试aspect 2.1.5 spring boot
 	 *
-	 *       同一个AOP下执行顺序
 	 *       before path:/aspet
-	 * 		 before className:com.glaway.myspringboot.aop.MyAspectController
-	 *    	 before methodName:aspect
-	 * 		 before paraName and args:{message=1231}
-	 * 		 aspect controller....
-	 * 		 afterReturning methodName:aspect, returning:ResultVo(code=1, message=成功, data=1231)
-	 * 		 after methodName:aspect
+	 *   	 before className:com.glaway.myspringboot.aop.MyAspectController
+	 *       before methodName:aspect
+	 *       before paraName and args:{message=null}
+	 *       aspect controller....
+	 *       after methodName:aspect
+	 *       afterReturning methodName:aspect, returning:ResultVo(code=1, message=成功, data=null)
 	 **/
 	@GetMapping
     public ResultVo<String> aspect(String message) {
@@ -44,10 +44,59 @@ public class MyAspectController {
 		return ResultVoUtil.success(message);
 	}
 
-	@GetMapping("/exception")
+	/**
+	 * @author 		   FZH
+	 * @date 		   2020/9/14
+	 * @parameter 	   []
+	 * @return 		   com.glaway.myspringboot.vo.ResultVo<java.lang.String>
+	 * @description
+	 * 		测试 afterThrowing 2.1.5 spring boot
+	 *       before path:/aspet/exception
+	 *       before className:com.glaway.myspringboot.aop.MyAspectController
+	 *       before methodName:exception
+	 *       before paraName and args:{}
+	 *       exception controller......
+	 *       after methodName:exception
+	 *       afterThrowing methodName : exception , throw message : exception.....
+	 **/
+	// @GetMapping("/exception")
 	public ResultVo<String> exception() {
 		log.info("exception controller......");
 		throw new RuntimeException("exception.....");
+	}
+
+	/**
+	 * @author 		   FZH
+	 * @date 		   2020/9/14
+	 * @parameter 	   [time]
+	 * @return 		   com.glaway.myspringboot.vo.ResultVo<java.lang.String>
+	 * @description
+	 *		测试around
+	 *	time != 1000
+	 *        around : begin
+	 *        sleep....
+	 *        around : execute time = -18
+	 *        around : return value = ResultVo(code=1, message=成功, data=wake up)
+	 *        around end
+	 *
+	 *	time=1000
+	 *        around : begin
+	 *        sleep....
+	 *        around error:sleep exception.
+	 **/
+	@GetMapping("/sleep/{time}")
+	public ResultVo<String> sleep(@PathVariable("time") long time) {
+		log.info("sleep....");
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			log.info("sleep");
+		}
+		if(time == 1000) {
+			throw new RuntimeException("sleep exception.");
+		}
+		return ResultVoUtil.success("wake up");
 	}
 
 
