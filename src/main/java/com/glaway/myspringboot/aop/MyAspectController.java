@@ -38,10 +38,11 @@ public class MyAspectController {
 	 *       after methodName:aspect
 	 *       afterReturning methodName:aspect, returning:ResultVo(code=1, message=成功, data=null)
 	 **/
+
 	@GetMapping
     public ResultVo<String> aspect(String message) {
 		log.info("aspect controller....");
-		return ResultVoUtil.success(message);
+		return ResultVoUtil.success("aaa");
 	}
 
 	/**
