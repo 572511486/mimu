@@ -9,3 +9,16 @@ spring:
         max-active: 10
         max-idle: 10
         max-wait: 2000
+
+person:
+  lastname: ymal
+  age: 18
+  boss: false
+  birth: 2020/10/27
+  map: {k1: v1,K2: v2}
+  lists:
+    - list1
+    - list2
+  dog:
+    name: 灰灰
+    age: 12
